@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="Unity3D.UnityEngine" Version="2018.3.5.1" />
+    <PackageReference Include="Unity3D.UnityEngine.UI" Version="2018.3.5.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BaldiModder.Core\BaldiModder.Core.csproj" />
+  </ItemGroup>
+
+</Project>

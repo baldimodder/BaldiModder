@@ -68,9 +68,7 @@ namespace BaldiModder.Runtime {
         }
 
         private IEnumerator PlayAnimationCoroutine(string animationName, AnimationPlayStyle playStyle) {
-            yield return null;
-
-            Data.Animation animation;
+            Animation animation;
 
             try {
                 animation = AssetManager.GetAnimation(animationName);
@@ -86,10 +84,12 @@ namespace BaldiModder.Runtime {
             int currentFrame = 0;
             int increment = 1;
 
-            while (true) {
-                yield return new WaitForSeconds(animation.Interval); //Wait.
+            yield return null;
 
-                spriteRenderer.sprite = AssetManager.GetSprite(animation.Frames[currentFrame].ImageName, AssetManager.GetSpritePivot(spriteRenderer.sprite), spriteRenderer.sprite.pixelsPerUnit); //Get the sprite.
+            while (true) {
+                try {
+                    spriteRenderer.sprite = AssetManager.GetSprite(animation.Frames[currentFrame].ImageName, AssetManager.GetSpritePivot(spriteRenderer.sprite), spriteRenderer.sprite.pixelsPerUnit); //Get the sprite.
+                } catch { }
                 currentFrame = Mathf.Clamp(currentFrame + increment, 0, animation.NumberOfFrames);
 
                 CurrentFrame = currentFrame;
@@ -108,7 +108,11 @@ namespace BaldiModder.Runtime {
                             break;
                     }
                 }
+
+                yield return new WaitForSeconds(animation.Interval); //Wait.
             }
+
+            yield return null;
         }
 
     }

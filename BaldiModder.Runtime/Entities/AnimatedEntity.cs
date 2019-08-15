@@ -14,18 +14,19 @@ namespace BaldiModder.Runtime.Entities {
 
         protected override void Awake() {
             base.Awake();
-
             animator = GetComponentInChildren<Animator>();
 
             if (OverrideAnimation) {
-                animationController = animator.gameObject.AddComponent<AnimationController>();
+                animationController = (animator == null ? GetComponentInChildren<SpriteRenderer>().gameObject : animator.gameObject).AddComponent<AnimationController>();
 
                 animationController.idleAnimationName = IdleAnimation;
 
-                //Clear all the Unity Animator's AnimationClips.
-                foreach (AnimatorClipInfo clipInfo in animator.GetCurrentAnimatorClipInfo(0)) {
-                    clipInfo.clip.ClearCurves();
-                }
+                try {
+                    //Clear all the Unity Animator's AnimationClips.
+                    foreach (AnimatorClipInfo clipInfo in animator.GetCurrentAnimatorClipInfo(0)) {
+                        clipInfo.clip.ClearCurves();
+                    }
+                } catch (NullReferenceException) { }
 
                 SetPivot();
                 animationController.PlayIdleAnimation();

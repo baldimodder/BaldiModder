@@ -202,23 +202,13 @@ namespace BaldiModder.Runtime {
                     } catch { }
                 }
 
-                //TODO: Reimplement NPC attachment.
-
-                /*
-                AddTypeToObject(obj, "ArtsAndCrafters", typeof(ArtsAndCraftersEntity));
-                AddTypeToObject(obj, "Baldi", typeof(BaldiEntity));
-                AddTypeToObject(obj, "Bully", typeof(BullyEntity));
-                AddTypeToObject(obj, "FirstPrize", typeof(FirstPrizeEntity));
-                AddTypeToObject(obj, "Player", typeof(PlayerEntity));
-                AddTypeToObject(obj, "Playtime", typeof(PlaytimeEntity));
-                AddTypeToObject(obj, "Principal", typeof(PrincipalEntity));
-                AddTypeToObject(obj, "Sweep", typeof(SweepEntity));
-
-                if (!addedEntityComponentToBaldiTutor && BaldisBasics.VersionData.GameObjectNameIs(obj.gameObject, "BaldiTutor") && obj.GetComponent<BaldiTutorEntity>() == null) {
-                    obj.gameObject.AddComponent<BaldiTutorEntity>();
-                    addedEntityComponentToBaldiTutor = true;
+                foreach (Type type in GetTypesWithRunAlongSideAttribute(Master.RuntimeAssembly)) {
+                    foreach (RunAlongSideAttribute runAlongSide in (RunAlongSideAttribute[])type.GetCustomAttributes(typeof(RunAlongSideAttribute), true)) {
+                        if (obj.GetType() == runAlongSide.Type && obj.GetComponent(type) == null) {
+                            obj.gameObject.AddComponent(type);
+                        }
+                    }
                 }
-                */
 
                 foreach (FieldInfo field in obj.GetType().GetFields()) {
                     HandleField(field, obj);
@@ -261,6 +251,8 @@ namespace BaldiModder.Runtime {
         #endregion
 
         private static List<Type> GetTypesWithRunAlongSideAttribute(Assembly assembly) {
+            return assembly.GetTypes().Where(type => type.IsDefined(typeof(RunAlongSideAttribute), false)).ToList();
+
             List<Type> types = new List<Type>();
 
             foreach (Type type in assembly.GetTypes()) {

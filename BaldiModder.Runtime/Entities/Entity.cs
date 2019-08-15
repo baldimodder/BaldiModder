@@ -22,7 +22,7 @@ namespace BaldiModder.Runtime.Entities {
         protected virtual void Awake() {
             try {
                 runAlongSide = (RunAlongSideAttribute)GetType().GetCustomAttributes(typeof(RunAlongSideAttribute), true)[0];
-                baseObject = GetComponent(runAlongSide.Type);
+                baseObject = GetComponent(Master.VersionData.HasClassData(runAlongSide.TypeString) ? runAlongSide.Type : typeof(Transform));
             } catch (Exception e) {
                 Debug.Log($"Failed to get the RunAlongSideAttribute or BaseObject of {GetType().Name} on {gameObject.name}!\n{e.ToString()}");
             }

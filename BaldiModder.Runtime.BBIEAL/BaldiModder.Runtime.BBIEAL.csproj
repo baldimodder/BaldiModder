@@ -1,8 +1,13 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net35</TargetFramework>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Unity3D.UnityEngine" Version="2018.3.5.1" />
+    <PackageReference Include="Unity3D.UnityEngine.UI" Version="2018.3.5.1" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\BaldiModder.Core\BaldiModder.Core.csproj" />

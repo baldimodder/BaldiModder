@@ -12,6 +12,8 @@ using UnityEngine.UI;
 namespace BaldiModder.Runtime {
     public class LoadingScreen : MonoBehaviour {
 
+        public LoadingScreenHandler loadingScreenHandler;
+
         private const string modPathStart = "mod:";
 
         private bool failed = false;
@@ -170,7 +172,9 @@ namespace BaldiModder.Runtime {
                 }
             }
 
-            try {
+            loadingScreenHandler.FinishedLoading();
+
+            /*try {
                 text.text = AssetManager.Config.WarningText;
 
                 GameObject controller = new GameObject("BaldiModder");
@@ -183,7 +187,7 @@ namespace BaldiModder.Runtime {
             } catch (Exception e) {
                 HandleException(e);
                 yield break;
-            }
+            }*/
         }
 
         private IEnumerator LoadFile(string path) {
@@ -205,21 +209,21 @@ namespace BaldiModder.Runtime {
         }
 
         private void LoadingMessage(string loading) {
-            if (String.IsNullOrEmpty(loading) || !Master.VerboseMode) text.text = "Loading...";
-            else text.text = "Loading " + loading + "...";
+            loadingScreenHandler.SetLoadingText(loading);
         }
 
         private void PreparingMessage(string loading) {
-            LoadingMessage(loading);
+            loadingScreenHandler.SetLoadingText(loading);
         }
 
         private void HandleException(Exception e) {
             StopAllCoroutines();
 
-            text.fontSize = 24;
-            text.text = $"An error has occured:\n{e.Message}\n\nPress R to retry. Press anything else to quit.";
+            /*text.fontSize = 24;
+            text.text = $"An error has occured:\n{e.Message}\n\nPress R to retry. Press anything else to quit.";*/
             Directory.CreateDirectory("errors");
             File.WriteAllText(Path.Combine("errors", string.Format("text-{0:yyyy-MM-dd_hh-mm-ss-tt}.log", DateTime.Now)), e.ToString());
+            loadingScreenHandler.HandleException(e);
             failed = true;
         }
 

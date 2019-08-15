@@ -25,15 +25,21 @@ namespace BaldiModder.Data {
             SceneNames = new Dictionary<string, string>();
         }
 
+        public bool HasClassData(string name) {
+            return ClassData.ContainsKey(name);
+        }
+
         public void AddClassData(string name, Type type) {
             ClassData[name] = new ClassData(type);
         }
 
         public ClassData GetClassData(string name) {
+            if (!ClassData.ContainsKey(name)) return null;
             return ClassData[name];
         }
 
         public Type GetType(string name) {
+            if (!ClassData.ContainsKey(name)) return null;
             return ClassData[name].Type;
         }
 
@@ -44,7 +50,8 @@ namespace BaldiModder.Data {
         /// <param name="name"></param>
         /// <returns></returns>
         public bool GameObjectNameIs(GameObject obj, string name) {
-            return obj.name.ToLower() == GameObjectNames[name].ToLower();
+            if (!GameObjectNames.ContainsKey(name)) return false;
+            return obj.name == GameObjectNames[name];
         }
 
         /// <summary>

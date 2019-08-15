@@ -16,8 +16,6 @@ namespace BaldiModder.Runtime {
 
         public static GameController Instance { get; private set; }
 
-        public List<FieldReplacer> FieldReplacers { get; set; }
-
         public List<int> AddedMaterialReplacerTo { get; set; }
         public List<int> HandledObjects { get; set; }
 
@@ -40,16 +38,14 @@ namespace BaldiModder.Runtime {
                 Debug.Log(SceneManager.GetSceneAt(i).name);
             }
 
-            FieldReplacers = new List<FieldReplacer>();
-
             if (FindObjectsOfType<GameController>().Length > 1) {
-                Debug.Log("There is already one BaldisBasicsController.");
+                Debug.Log("There is already one GameController.");
                 Destroy(gameObject);
             }
 
             Instance = this;
 
-            Debug.Log("BaldisBasicsController has been instantiated as " + name + ".");
+            Debug.Log("GameController has been instantiated as " + name + ".");
 
             DontDestroyOnLoad(gameObject);
 
@@ -93,6 +89,10 @@ namespace BaldiModder.Runtime {
             }
 
             #endregion
+        }
+
+        private void OnApplicationQuit() {
+            
         }
 
         private void SceneManager_activeSceneChanged(Scene before, Scene after) {
@@ -199,7 +199,11 @@ namespace BaldiModder.Runtime {
 
                 foreach (Type type in GetTypesWithRunAlongSideAttribute(Master.RuntimeAssembly)) {
                     foreach (RunAlongSideAttribute runAlongSide in (RunAlongSideAttribute[])type.GetCustomAttributes(typeof(RunAlongSideAttribute), true)) {
-                        if (obj.GetType() == runAlongSide.Type && obj.GetComponent(type) == null) {
+                        if (obj.GetComponent(type) != null) continue;
+
+                        if (Master.VersionData.GameObjectNameIs(gameObj, runAlongSide.TypeString)) {
+                            obj.gameObject.AddComponent(type);
+                        } else if (obj.GetType() == runAlongSide.Type) {
                             obj.gameObject.AddComponent(type);
                         }
                     }

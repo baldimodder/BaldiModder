@@ -23,6 +23,7 @@ namespace BaldiModder.Runtime {
             text = GetComponentInChildren<Text>();
 
             text.text = "";
+            Master.VersionData = AssetManager.ReadData<VersionData>("version", false);
         }
 
         private void Start() {

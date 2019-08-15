@@ -1,18 +1,13 @@
 ﻿using System;
-using System.IO;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Collections;
-using System.Collections.Generic;
-
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.Profiling;
-using UnityEngine.SceneManagement;
-
-using Newtonsoft.Json;
 
 using BaldiModder.Data;
+
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace BaldiModder.Runtime {
     public class GameController : MonoBehaviour {
@@ -252,32 +247,6 @@ namespace BaldiModder.Runtime {
 
         private static List<Type> GetTypesWithRunAlongSideAttribute(Assembly assembly) {
             return assembly.GetTypes().Where(type => type.IsDefined(typeof(RunAlongSideAttribute), false)).ToList();
-
-            List<Type> types = new List<Type>();
-
-            foreach (Type type in assembly.GetTypes()) {
-                try {
-                    if (type.GetCustomAttributes(typeof(RunAlongSideAttribute), true).Length > 0) types.Add(type);
-                } catch { }
-            }
-
-            return types;
-        }
-
-        private static List<Type> GetTypesWithRunAlongSideAttributeInAssemblies(Assembly[] assemblies) {
-            List<Type> types = new List<Type>();
-
-            foreach (Assembly assembly in assemblies) {
-                try {
-                    foreach (Type type in assembly.GetTypes()) {
-                        try {
-                            if (type.GetCustomAttributes(typeof(RunAlongSideAttribute), true).Length > 0) types.Add(type);
-                        } catch { }
-                    }
-                } catch { }
-            }
-
-            return types;
         }
 
         private void HandleField(FieldInfo field, object obj) {

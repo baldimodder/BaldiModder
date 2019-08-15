@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net35</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BaldiModder.Core\BaldiModder.Core.csproj" />
+    <ProjectReference Include="..\BaldiModder.Runtime\BaldiModder.Runtime.csproj" />
+  </ItemGroup>
+
+</Project>

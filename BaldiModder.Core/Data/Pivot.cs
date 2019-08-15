@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace BaldiModder.Data {
     public struct Pivot {
 
-        internal Vector2 AsVector2 {
+        public Vector2 AsVector2 {
             get {
                 return new Vector2(X, Y);
             }

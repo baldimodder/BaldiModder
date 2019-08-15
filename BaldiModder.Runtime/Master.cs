@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Reflection;
 
 using BaldiModder.Data;
 
@@ -10,6 +8,7 @@ namespace BaldiModder.Runtime {
         public static bool VerboseMode { get; set; }
         public static bool DebugMode { get; set; }
 
+        public static Assembly RuntimeAssembly { get; set; }
         public static VersionData VersionData { get; set; }
 
         static Master() {

@@ -28,6 +28,8 @@ namespace BaldiModder.Runtime.BBIEAL {
 
         public override void FinishedLoading() {
             try {
+                Master.RuntimeAssembly = GetType().Assembly;
+
                 SetText(AssetManager.Config.WarningText);
 
                 GameObject controller = new GameObject("BaldiModder");

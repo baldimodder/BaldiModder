@@ -28,6 +28,7 @@ namespace BaldiModder.Runtime.Entities {
                 }
 
                 SetPivot();
+                animationController.PlayIdleAnimation();
             }
         }
 

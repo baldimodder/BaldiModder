@@ -50,8 +50,12 @@ namespace BaldiModder.Data {
         /// <param name="name"></param>
         /// <returns></returns>
         public bool GameObjectNameIs(GameObject obj, string name) {
-            if (!GameObjectNames.ContainsKey(name)) return false;
+            if (!HasGameObjectName(name)) return obj.name == name;
             return obj.name == GameObjectNames[name];
+        }
+
+        public bool HasGameObjectName(string name) {
+            return GameObjectNames.ContainsKey(name);
         }
 
         /// <summary>

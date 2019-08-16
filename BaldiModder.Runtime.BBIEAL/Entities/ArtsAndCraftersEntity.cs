@@ -1,5 +1,4 @@
-﻿using BaldiModder.Data;
-using BaldiModder.Runtime.Entities;
+﻿using BaldiModder.Runtime.Entities;
 
 namespace BaldiModder.Runtime.BBIEAL.Entities {
     [RunAlongSide("ArtsAndCrafters")]

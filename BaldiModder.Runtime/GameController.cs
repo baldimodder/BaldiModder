@@ -24,6 +24,8 @@ namespace BaldiModder.Runtime {
 
         private int oldCount = 0;
 
+        private List<Type> runAlongSideTypes = GetTypesWithRunAlongSideAttribute(Master.RuntimeAssembly);
+
         #endregion
 
         #region Unity Events
@@ -197,7 +199,7 @@ namespace BaldiModder.Runtime {
                     } catch { }
                 }
 
-                foreach (Type type in GetTypesWithRunAlongSideAttribute(Master.RuntimeAssembly)) {
+                foreach (Type type in runAlongSideTypes) {
                     foreach (RunAlongSideAttribute runAlongSide in (RunAlongSideAttribute[])type.GetCustomAttributes(typeof(RunAlongSideAttribute), true)) {
                         if (obj.GetComponent(type) != null) continue;
 

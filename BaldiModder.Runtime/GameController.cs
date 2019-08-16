@@ -257,12 +257,6 @@ namespace BaldiModder.Runtime {
 
         private void HandleField(FieldInfo field, object obj) {
             try {
-                if (field.FieldType == typeof(GameObject)) {
-                    try {
-                        HandleObject((GameObject)field.GetValue(obj));
-                    } catch { }
-                }
-
                 if (field.FieldType == typeof(AudioClip)) {
                     field.SetValue(obj, AssetManager.ReplaceAudioClip((AudioClip)field.GetValue(obj)));
                 }

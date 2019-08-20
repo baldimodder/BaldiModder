@@ -4,6 +4,7 @@ using System.Collections;
 using BaldiModder.Data;
 
 using UnityEngine;
+using UnityEngine.UI;
 
 using Animation = BaldiModder.Data.Animation;
 
@@ -19,15 +20,23 @@ namespace BaldiModder.Runtime {
         public int CurrentFrame { get; private set; }
 
         private SpriteRenderer spriteRenderer;
+        private Image image;
         private Coroutine coroutine;
 
         private void Start() {
             CurrentAnimationName = "";
 
-            if (GetComponent<SpriteRenderer>() != null) spriteRenderer = GetComponent<SpriteRenderer>();
-            else if (GetComponentInParent<SpriteRenderer>() != null) spriteRenderer = GetComponentInParent<SpriteRenderer>();
-            else if (GetComponentInChildren<SpriteRenderer>() != null) spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-            else Debug.Log($"No sprite renderer found on {gameObject.name}.");
+            if (GetComponent<SpriteRenderer>() != null) {
+                spriteRenderer = GetComponent<SpriteRenderer>();
+            } else if (GetComponentInParent<SpriteRenderer>() != null) {
+                spriteRenderer = GetComponentInParent<SpriteRenderer>();
+            } else if (GetComponentInChildren<SpriteRenderer>() != null) {
+                spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+            } else {
+                Debug.Log($"No sprite renderer found on {gameObject.name}.");
+
+                image = GetComponent<Image>();
+            }
         }
 
         private void LateUpdate() {
@@ -44,12 +53,40 @@ namespace BaldiModder.Runtime {
                     return;
                 }
 
-                spriteRenderer.sprite = AssetManager.GetSprite(CurrentAnimation.Frames[CurrentFrame].ImageName,
-                    forcePivot ? pivot : AssetManager.GetSpritePivot(spriteRenderer.sprite),
-                    AssetManager.GeneratePixelsPerUnit(spriteRenderer.sprite.pixelsPerUnit, spriteRenderer.size,
-                    new Vector2(spriteTexture.width, spriteTexture.height))); //Get the sprite.
+                Vector2 originalPivot = Vector2.zero;
+
+                try {
+                    originalPivot = AssetManager.GetSpritePivot(GetCurrentSprite());
+                } catch { }
+
+                SetSprite(AssetManager.GetSprite(CurrentAnimation.Frames[CurrentFrame].ImageName,
+                    forcePivot ? pivot : originalPivot,
+                    AssetManager.GeneratePixelsPerUnit(GetCurrentSprite().pixelsPerUnit, spriteRenderer? spriteRenderer.size : GetCurrentSprite().rect.size,
+                    new Vector2(spriteTexture.width, spriteTexture.height)))); //Get the sprite.
             } catch (Exception e) {
                 Debug.Log(e.ToString());
+            }
+        }
+
+        public Sprite GetCurrentSprite() {
+            if (spriteRenderer != null) {
+                return spriteRenderer.sprite;
+            }
+
+            if (image != null) {
+                return image.sprite;
+            }
+
+            return null;
+        }
+
+        public void SetSprite(Sprite sprite) {
+            if (spriteRenderer != null) {
+                spriteRenderer.sprite = sprite;
+            }
+
+            if (image != null) {
+                image.sprite = sprite;
             }
         }
 
@@ -84,18 +121,26 @@ namespace BaldiModder.Runtime {
             int currentFrame = 0;
             int increment = 1;
 
-            yield return null;
-
             while (true) {
                 try {
-                    spriteRenderer.sprite = AssetManager.GetSprite(animation.Frames[currentFrame].ImageName, AssetManager.GetSpritePivot(spriteRenderer.sprite), spriteRenderer.sprite.pixelsPerUnit); //Get the sprite.
+                    spriteRenderer.sprite = AssetManager.GetSprite(animation.Frames[currentFrame].ImageName, AssetManager.GetSpritePivot(GetCurrentSprite()), GetCurrentSprite().pixelsPerUnit); //Get the sprite.
                 } catch { }
                 currentFrame = Mathf.Clamp(currentFrame + increment, 0, animation.NumberOfFrames);
 
                 CurrentFrame = currentFrame;
 
-                if (currentFrame == animation.NumberOfFrames && increment == 1) increment = -1; //Go back.
-                else if (currentFrame == 0 && increment == -1) {
+                if (currentFrame == animation.NumberOfFrames && increment == 1) {
+                    switch (playStyle) {
+                        case AnimationPlayStyle.Loop:
+                            currentFrame = 0;
+                            break;
+                        case AnimationPlayStyle.StayOnLastFrame:
+                            yield break;
+                        default:
+                            increment = -1; //Go back.
+                            break;
+                    }
+                } else if (currentFrame == 0 && increment == -1) {
                     switch (playStyle) {
                         case AnimationPlayStyle.Loop:
                             increment = 1; //Loop the animation.

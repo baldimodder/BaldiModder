@@ -55,16 +55,7 @@ namespace BaldiModder.Runtime {
         }
 
         private void Update() {
-            int count = FindObjectsOfType<GameObject>().Length; //Get the number of GameObjects.
-            if (count != oldCount) { //Compare the counts.
-                HandleAllObjects(); //Handle the objects.
-                oldCount = count; //Set the old count.
-            }
-
-            #region Debug Mode
-
             if (Master.DebugMode) {
-
                 if (Master.VersionData.SceneNameIs(SceneManager.GetActiveScene(), "School")) {
                     if (Input.GetKey(KeyCode.O)) {
                         try {
@@ -89,8 +80,14 @@ namespace BaldiModder.Runtime {
                     SceneManager.LoadScene(Master.VersionData.SceneNames["GameOver"]);
                 }
             }
+        }
 
-            #endregion
+        private void LateUpdate() {
+            int count = FindObjectsOfType<GameObject>().Length; //Get the number of GameObjects.
+            if (count != oldCount) { //Compare the counts.
+                HandleAllObjects(); //Handle the objects.
+                oldCount = count; //Set the old count.
+            }
         }
 
         private void OnApplicationQuit() {

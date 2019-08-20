@@ -205,7 +205,7 @@ namespace BaldiModder {
             return tex;
         }
 
-        public static Texture2D ReplaceTexture(Texture2D original) {
+        public static Texture ReplaceTexture(Texture original) {
             if (original == null) {
                 //Debug.Log("original is null");
                 return original;

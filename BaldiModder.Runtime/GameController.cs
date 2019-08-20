@@ -196,6 +196,7 @@ namespace BaldiModder.Runtime {
                 if (obj.GetType() == typeof(RawImage)) {
                     try {
                         RawImage image = (RawImage)obj;
+                        image.texture = AssetManager.ReplaceTexture(image.texture);
                     } catch { }
                 }
 

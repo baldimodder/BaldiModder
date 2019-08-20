@@ -90,10 +90,6 @@ namespace BaldiModder.Runtime {
             }
         }
 
-        private void OnApplicationQuit() {
-            
-        }
-
         private void SceneManager_activeSceneChanged(Scene before, Scene after) {
             Debug.Log(after.name);
 
